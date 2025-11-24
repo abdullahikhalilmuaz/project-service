@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/landing.css';
 
 const Landing = () => {
@@ -67,25 +68,25 @@ const Landing = () => {
   return (
     <div className="landing-container">
       {/* Navigation */}
-      <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="nav-content">
           <div className="logo">
             <span className="logo-icon">💡</span>
             <span className="logo-text">ProjectHub</span>
           </div>
           <div className="nav-links">
-            {/* <a href="#home">Home</a>
-            <a href="#projects">Projects</a>
-            <a href="#categories">Categories</a>
-            <a href="#testimonials">Testimonials</a> */}
+            {/* Optional links */}
           </div>
           <div className="nav-buttons">
-            <button className="btn-secondary">Login</button>
-            <button className="btn-primary">Register</button>
+            <Link to="/login">
+              <button className="btn-secondary">Login</button>
+            </Link>
+            <Link to="/register">
+              <button className="btn-primary">Register</button>
+            </Link>
           </div>
         </div>
       </nav>
-
    <div className='idioms'>
        {/* Hero Section */}
       <div className="hero-section" id="home">
