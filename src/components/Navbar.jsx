@@ -27,27 +27,7 @@ function Navbar() {
         <div style={linksContainerStyle}>
           {!isLoggedIn ? (
             <>
-              <Link 
-                to="/login" 
-                style={{
-                  ...linkStyle,
-                  ...(location.pathname === "/login" ? activeLinkStyle : {})
-                }}
-              >
-                <FaSignInAlt style={{ marginRight: "0.3rem" }} />
-                Login
-              </Link>
-              <Link 
-                to="/register" 
-                style={{
-                  ...linkStyle,
-                  ...registerButtonStyle,
-                  ...(location.pathname === "/register" ? activeLinkStyle : {})
-                }}
-              >
-                <FaUserPlus style={{ marginRight: "0.3rem" }} />
-                Sign Up
-              </Link>
+             
             </>
           ) : (
             <>
