@@ -218,7 +218,7 @@ const Home = () => {
             </p>
             
             {/* Debug info - remove in production */}
-            {process.env.NODE_ENV === 'development' && (
+            {/* {process.env.NODE_ENV === 'development' && (
               <div style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
                 <details>
                   <summary>Debug Info</summary>
@@ -233,7 +233,7 @@ const Home = () => {
                   </button>
                 </details>
               </div>
-            )}
+            )} */}
           </div>
           <div className="header-right">
             {/* User Profile Section - Uncomment if you want to show user profile */}
@@ -286,41 +286,16 @@ const Home = () => {
       <main className="home-main">
         <div className="main-content">
           {/* Search and Filters */}
-          <div className="filters-section">
-            <div className="search-box">
-              <input
-                type="text"
-                placeholder="Search projects..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-              <span className="search-icon">🔍</span>
-            </div>
-
-            <div className="tabs-container">
-              <div className="tabs">
-                <button
-                  className={`tab ${activeTab === 'all' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('all')}
-                >
-                  All Projects
-                </button>
-                <button
-                  className={`tab ${activeTab === 'saved' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('saved')}
-                >
-                  Saved Projects
-                </button>
-                <button
-                  className={`tab ${activeTab === 'liked' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('liked')}
-                >
-                  Liked Projects
-                </button>
+              <div className="search-box">
+                <input
+                  type="text"
+                  placeholder="Search projects..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+                <span className="search-icon">🔍</span>
               </div>
-            </div>
-          </div>
 
           {/* Categories */}
           <section className="categories-section">

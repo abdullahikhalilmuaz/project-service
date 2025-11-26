@@ -9,6 +9,8 @@
   background: linear-gradient(135deg, #f8faff 0%, #f5f3ff 100%);
   padding-bottom: 4rem;
   overflow: scroll;
+  padding: 100px;
+  box-sizing: border-box;
 }
 
 .topics-header {

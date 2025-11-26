@@ -7,6 +7,17 @@ const AdminPanel = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
+  // Category-based image mapping
+  const categoryImages = {
+    web: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=250&fit=crop',
+    mobile: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=250&fit=crop',
+    ai: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=250&fit=crop',
+    data: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop',
+    iot: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=250&fit=crop',
+    blockchain: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=250&fit=crop',
+    cybersecurity: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=250&fit=crop'
+  };
+
   // Form state for new topic
   const [topicForm, setTopicForm] = useState({
     title: '',
@@ -17,7 +28,7 @@ const AdminPanel = () => {
     technologies: [],
     resources: 0,
     complexity: 1,
-    image: '',
+    image: categoryImages.web, // Default image
     learningObjectives: [],
     prerequisites: [],
     expectedOutcomes: [],
@@ -29,7 +40,7 @@ const AdminPanel = () => {
   const fetchTopics = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/topics');
+      const response = await fetch('https://project-service-server.onrender.com/api/topics');
       const data = await response.json();
       
       if (data.success) {
@@ -53,10 +64,18 @@ const AdminPanel = () => {
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setTopicForm(prev => ({
-      ...prev,
+    
+    const updatedForm = {
+      ...topicForm,
       [name]: type === 'checkbox' ? checked : value
-    }));
+    };
+
+    // Automatically update image when category changes
+    if (name === 'category' && categoryImages[value]) {
+      updatedForm.image = categoryImages[value];
+    }
+
+    setTopicForm(updatedForm);
   };
 
   // Handle array fields (technologies, etc.)
@@ -75,7 +94,7 @@ const AdminPanel = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:5000/api/topics', {
+      const response = await fetch('https://project-service-server.onrender.com/api/topics', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,16 +106,18 @@ const AdminPanel = () => {
 
       if (data.success) {
         setMessage({ type: 'success', text: 'Topic created successfully!' });
+        // Reset form but keep the category and its image
+        const currentCategory = topicForm.category;
         setTopicForm({
           title: '',
           description: '',
-          category: 'web',
+          category: currentCategory,
           difficulty: 'beginner',
           duration: '',
           technologies: [],
           resources: 0,
           complexity: 1,
-          image: '',
+          image: categoryImages[currentCategory],
           learningObjectives: [],
           prerequisites: [],
           expectedOutcomes: [],
@@ -121,7 +142,7 @@ const AdminPanel = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/topics/${topicId}`, {
+      const response = await fetch(`https://project-service-server.onrender.com/api/topics/${topicId}`, {
         method: 'DELETE'
       });
 
@@ -140,13 +161,13 @@ const AdminPanel = () => {
 
   // Categories for dropdown
   const categories = [
-    { value: 'web', label: 'Web Development' },
-    { value: 'mobile', label: 'Mobile Apps' },
-    { value: 'ai', label: 'AI & Machine Learning' },
-    { value: 'data', label: 'Data Science' },
-    { value: 'iot', label: 'IoT' },
-    { value: 'blockchain', label: 'Blockchain' },
-    { value: 'cybersecurity', label: 'Cybersecurity' }
+    { value: 'web', label: 'Web Development', image: categoryImages.web },
+    { value: 'mobile', label: 'Mobile Apps', image: categoryImages.mobile },
+    { value: 'ai', label: 'AI & Machine Learning', image: categoryImages.ai },
+    { value: 'data', label: 'Data Science', image: categoryImages.data },
+    { value: 'iot', label: 'IoT', image: categoryImages.iot },
+    { value: 'blockchain', label: 'Blockchain', image: categoryImages.blockchain },
+    { value: 'cybersecurity', label: 'Cybersecurity', image: categoryImages.cybersecurity }
   ];
 
   const difficulties = [
@@ -198,6 +219,25 @@ const AdminPanel = () => {
             {/* Create Topic Form */}
             <div className="form-section">
               <h2 className="section-title">Create New Project Topic</h2>
+              
+              {/* Image Preview */}
+              <div className="image-preview-section">
+                <h4>Category Image Preview</h4>
+                <div className="image-preview">
+                  <img 
+                    src={topicForm.image} 
+                    alt={`${topicForm.category} category`}
+                    className="preview-image"
+                  />
+                  <div className="image-overlay">
+                    <span className="category-badge">{topicForm.category}</span>
+                  </div>
+                </div>
+                <p className="image-note">
+                  Image automatically selected based on category
+                </p>
+              </div>
+
               <form onSubmit={handleCreateTopic} className="topic-form">
                 <div className="form-row">
                   <div className="form-group">
@@ -336,18 +376,6 @@ const AdminPanel = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="image">Image URL</label>
-                  <input
-                    type="url"
-                    id="image"
-                    name="image"
-                    value={topicForm.image}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com/image.jpg"
-                  />
-                </div>
-
-                <div className="form-group">
                   <label htmlFor="learningObjectives">Learning Objectives (comma-separated)</label>
                   <textarea
                     id="learningObjectives"
@@ -355,6 +383,28 @@ const AdminPanel = () => {
                     onChange={(e) => handleArrayInput('learningObjectives', e.target.value)}
                     rows="3"
                     placeholder="What students will learn from this project"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="prerequisites">Prerequisites (comma-separated)</label>
+                  <textarea
+                    id="prerequisites"
+                    name="prerequisites"
+                    onChange={(e) => handleArrayInput('prerequisites', e.target.value)}
+                    rows="2"
+                    placeholder="Required skills or knowledge"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="expectedOutcomes">Expected Outcomes (comma-separated)</label>
+                  <textarea
+                    id="expectedOutcomes"
+                    name="expectedOutcomes"
+                    onChange={(e) => handleArrayInput('expectedOutcomes', e.target.value)}
+                    rows="2"
+                    placeholder="What the project will deliver"
                   />
                 </div>
 
@@ -378,6 +428,9 @@ const AdminPanel = () => {
                 <div className="topics-list">
                   {topics.map(topic => (
                     <div key={topic._id} className="topic-item">
+                      <div className="topic-image">
+                        <img src={topic.image} alt={topic.title} />
+                      </div>
                       <div className="topic-info">
                         <h4 className="topic-title">{topic.title}</h4>
                         <div className="topic-meta">
@@ -387,6 +440,16 @@ const AdminPanel = () => {
                           {topic.isTrending && <span className="trending-badge">Trending</span>}
                         </div>
                         <p className="topic-description">{topic.description}</p>
+                        {topic.technologies && topic.technologies.length > 0 && (
+                          <div className="topic-technologies">
+                            {topic.technologies.slice(0, 3).map((tech, index) => (
+                              <span key={index} className="tech-tag">{tech}</span>
+                            ))}
+                            {topic.technologies.length > 3 && (
+                              <span className="tech-tag">+{topic.technologies.length - 3} more</span>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <div className="topic-actions">
                         <button 
@@ -432,6 +495,38 @@ const AdminPanel = () => {
                   : '0'
                 }
               </p>
+            </div>
+            <div className="stat-card">
+              <h3>Categories</h3>
+              <p className="stat-number">
+                {new Set(topics.map(t => t.category)).size}
+              </p>
+            </div>
+          </div>
+
+          {/* Category Distribution */}
+          <div className="category-distribution">
+            <h3>Topics by Category</h3>
+            <div className="category-bars">
+              {categories.map(cat => {
+                const count = topics.filter(t => t.category === cat.value).length;
+                const percentage = topics.length > 0 ? (count / topics.length) * 100 : 0;
+                
+                return (
+                  <div key={cat.value} className="category-bar">
+                    <div className="category-info">
+                      <span className="category-name">{cat.label}</span>
+                      <span className="category-count">{count}</span>
+                    </div>
+                    <div className="bar-container">
+                      <div 
+                        className="bar-fill" 
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

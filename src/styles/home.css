@@ -9,6 +9,8 @@
   width: 100%;
   background: linear-gradient(135deg, #f8faff 0%, #f5f3ff 100%);
   overflow: auto;
+  padding: 0 0 100px 0;
+  box-sizing: border-box;
 }
 
 .home-container::-webkit-scrollbar {
