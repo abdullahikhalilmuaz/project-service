@@ -52,17 +52,6 @@ function Navbar() {
     <nav style={navbarStyle}>
       <div style={navContainerStyle}>
         
-        {/* Logo/Brand */}
-       {window.location.pathname === '/' ? ("") : (
-        <>
-         <div style={brandStyle}>
-          <Link to={checkLoginStatus() ? "/home" : "/"} style={brandLinkStyle}>
-            <div style={logoIconStyle}>💡</div>
-            <span style={logoTextStyle}>ProjectHub</span>
-          </Link>
-        </div>
-        </>
-       )}
 
         {/* Navigation Links */}
         <div style={linksContainerStyle}>
