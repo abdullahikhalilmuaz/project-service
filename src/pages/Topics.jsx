@@ -7,6 +7,9 @@ const ProjectTopics = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [sortBy, setSortBy] = useState('popular');
+  const [projectTopics, setProjectTopics] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const categories = [
     { id: 'all', name: 'All Categories' },
@@ -26,120 +29,34 @@ const ProjectTopics = () => {
     { id: 'advanced', name: 'Advanced' }
   ];
 
-  const projectTopics = [
-    {
-      id: 1,
-      title: 'Smart Home Automation System with Voice Control',
-      description: 'Build an IoT-based home automation system that can be controlled via voice commands and mobile app. Includes features like lighting control, temperature monitoring, and security integration.',
-      category: 'iot',
-      difficulty: 'intermediate',
-      duration: '4-5 months',
-      popularity: 95,
-      isTrending: true,
-      technologies: ['Arduino', 'Node.js', 'React Native', 'AWS IoT'],
-      resources: 12,
-      complexity: 7,
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=250&fit=crop'
-    },
-    {
-      id: 2,
-      title: 'AI-Powered Educational Chatbot',
-      description: 'Develop an intelligent chatbot that assists students with course materials, assignment help, and personalized learning recommendations using natural language processing.',
-      category: 'ai',
-      difficulty: 'advanced',
-      duration: '5-6 months',
-      popularity: 88,
-      isTrending: true,
-      technologies: ['Python', 'TensorFlow', 'React', 'MongoDB'],
-      resources: 15,
-      complexity: 8,
-      image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=250&fit=crop'
-    },
-    {
-      id: 3,
-      title: 'E-Commerce Platform with Real-time Analytics',
-      description: 'Create a full-stack e-commerce solution with real-time sales analytics, inventory management, and customer behavior tracking dashboard.',
-      category: 'web',
-      difficulty: 'intermediate',
-      duration: '3-4 months',
-      popularity: 92,
-      isTrending: false,
-      technologies: ['React', 'Node.js', 'PostgreSQL', 'D3.js'],
-      resources: 10,
-      complexity: 6,
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop'
-    },
-    {
-      id: 4,
-      title: 'Blockchain-based Voting System',
-      description: 'Implement a secure and transparent voting system using blockchain technology to ensure vote integrity and prevent fraud.',
-      category: 'blockchain',
-      difficulty: 'advanced',
-      duration: '5-6 months',
-      popularity: 78,
-      isTrending: true,
-      technologies: ['Solidity', 'Web3.js', 'React', 'Ethereum'],
-      resources: 8,
-      complexity: 9,
-      image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=250&fit=crop'
-    },
-    {
-      id: 5,
-      title: 'Fitness Tracking Mobile Application',
-      description: 'Build a cross-platform fitness app with workout plans, progress tracking, social features, and AI-based personal training recommendations.',
-      category: 'mobile',
-      difficulty: 'beginner',
-      duration: '2-3 months',
-      popularity: 85,
-      isTrending: false,
-      technologies: ['React Native', 'Firebase', 'Redux', 'Chart.js'],
-      resources: 6,
-      complexity: 4,
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop'
-    },
-    {
-      id: 6,
-      title: 'Predictive Analytics Dashboard for Business',
-      description: 'Create a comprehensive data visualization dashboard for business intelligence with predictive analytics and real-time reporting features.',
-      category: 'data',
-      difficulty: 'advanced',
-      duration: '4-5 months',
-      popularity: 82,
-      isTrending: false,
-      technologies: ['Python', 'Django', 'React', 'Tableau'],
-      resources: 14,
-      complexity: 7,
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop'
-    },
-    {
-      id: 7,
-      title: 'Cybersecurity Threat Detection System',
-      description: 'Develop an intelligent system that detects and prevents cybersecurity threats using machine learning algorithms and real-time monitoring.',
-      category: 'cybersecurity',
-      difficulty: 'advanced',
-      duration: '6-7 months',
-      popularity: 75,
-      isTrending: true,
-      technologies: ['Python', 'TensorFlow', 'Elasticsearch', 'Kibana'],
-      resources: 16,
-      complexity: 9,
-      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=250&fit=crop'
-    },
-    {
-      id: 8,
-      title: 'Smart Agriculture Monitoring System',
-      description: 'Create an IoT solution for precision agriculture with soil monitoring, automated irrigation, and crop health analysis using sensors and drones.',
-      category: 'iot',
-      difficulty: 'intermediate',
-      duration: '4-5 months',
-      popularity: 70,
-      isTrending: false,
-      technologies: ['Arduino', 'Python', 'React', 'AWS'],
-      resources: 9,
-      complexity: 6,
-      image: 'https://images.unsplash.com/photo-1586771107445-d3ca888129fe?w=400&h=250&fit=crop'
-    }
-  ];
+  // Fetch project topics from backend
+  useEffect(() => {
+    const fetchProjectTopics = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/topics');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch project topics');
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          setProjectTopics(data.data);
+        } else {
+          throw new Error(data.message || 'Failed to fetch topics');
+        }
+      } catch (err) {
+        console.error('Error fetching project topics:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjectTopics();
+  }, []);
 
   const filteredTopics = projectTopics
     .filter(topic => {
@@ -164,24 +81,24 @@ const ProjectTopics = () => {
     });
 
   const isTopicSelected = (topicId) => {
-    return selectedTopics.some(topic => topic.id === topicId);
+    return selectedTopics.some(topic => topic._id === topicId);
   };
 
   const handleAddToWishlist = (topic) => {
-    if (selectedTopics.length >= 3 && !isTopicSelected(topic.id)) {
+    if (selectedTopics.length >= 3 && !isTopicSelected(topic._id)) {
       alert('You can only select up to 3 project topics for your proposal.');
       return;
     }
 
-    if (isTopicSelected(topic.id)) {
-      setSelectedTopics(selectedTopics.filter(t => t.id !== topic.id));
+    if (isTopicSelected(topic._id)) {
+      setSelectedTopics(selectedTopics.filter(t => t._id !== topic._id));
     } else {
       setSelectedTopics([...selectedTopics, topic]);
     }
   };
 
   const handleRemoveFromWishlist = (topicId) => {
-    setSelectedTopics(selectedTopics.filter(topic => topic.id !== topicId));
+    setSelectedTopics(selectedTopics.filter(topic => topic._id !== topicId));
   };
 
   const handleClearWishlist = () => {
@@ -196,6 +113,35 @@ const ProjectTopics = () => {
       default: return '#6b7280';
     }
   };
+
+  if (loading) {
+    return (
+      <div className="project-topics-container">
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <p>Loading project topics...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="project-topics-container">
+        <div className="error-state">
+          <div className="error-icon">⚠️</div>
+          <h3>Error Loading Topics</h3>
+          <p>{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="retry-btn"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="project-topics-container">
@@ -212,6 +158,66 @@ const ProjectTopics = () => {
         {/* Main Content */}
         <div className="topics-main">
           {/* Filters Section */}
+          <div className="filters-section">
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Search project topics..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <span className="search-icon">🔍</span>
+            </div>
+
+            {/* <div className="filter-controls">
+              <div className="filter-group">
+                <label htmlFor="category-filter">Category</label>
+                <select
+                  id="category-filter"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="filter-select"
+                >
+                  {categories.map(category => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="filter-group">
+                <label htmlFor="difficulty-filter">Difficulty</label>
+                <select
+                  id="difficulty-filter"
+                  value={selectedDifficulty}
+                  onChange={(e) => setSelectedDifficulty(e.target.value)}
+                  className="filter-select"
+                >
+                  {difficulties.map(difficulty => (
+                    <option key={difficulty.id} value={difficulty.id}>
+                      {difficulty.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="filter-group">
+                <label htmlFor="sort-filter">Sort By</label>
+                <select
+                  id="sort-filter"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="popular">Most Popular</option>
+                  <option value="duration">Duration</option>
+                  <option value="complexity">Complexity</option>
+                </select>
+              </div>
+            </div> */}
+          </div>
 
           {/* Topics Grid */}
           <div className="topics-grid-section">
@@ -221,33 +227,39 @@ const ProjectTopics = () => {
               </h2>
               <div className="selection-info">
                 <span className="selection-count">
-                  {selectedTopics.length}/3 topics selected
+                  {selectedTopics.length}/{selectedTopics.length+1} topics selected
                 </span>
               </div>
             </div>
 
             <div className="topics-grid">
               {filteredTopics.map(topic => (
-                <div key={topic.id} className="topic-card">
+                <div key={topic._id} className="topic-card">
                   {topic.isTrending && (
                     <div className="trending-badge">🔥 Trending</div>
                   )}
                   
                   <div className="topic-image-wrapper">
-                    <img src={topic.image} alt={topic.title} className="topic-image" />
+                    <img 
+                      src={topic.image || 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=250&fit=crop'} 
+                      alt={topic.title} 
+                      className="topic-image" 
+                    />
                     <div className="topic-overlay">
                       <button 
                         className="overlay-btn"
                         onClick={() => handleAddToWishlist(topic)}
                       >
-                        {isTopicSelected(topic.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                        {isTopicSelected(topic._id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
                       </button>
                     </div>
                   </div>
 
                   <div className="topic-content">
                     <div className="topic-meta">
-                      <span className="topic-category">{categories.find(c => c.id === topic.category)?.name}</span>
+                      <span className="topic-category">
+                        {categories.find(c => c.id === topic.category)?.name || topic.category}
+                      </span>
                       <span 
                         className="topic-difficulty"
                         style={{ color: getDifficultyColor(topic.difficulty) }}
@@ -260,10 +272,10 @@ const ProjectTopics = () => {
                     <p className="topic-description">{topic.description}</p>
 
                     <div className="topic-technologies">
-                      {topic.technologies.slice(0, 3).map((tech, index) => (
+                      {topic.technologies?.slice(0, 3).map((tech, index) => (
                         <span key={index} className="tech-tag">{tech}</span>
                       ))}
-                      {topic.technologies.length > 3 && (
+                      {topic.technologies && topic.technologies.length > 3 && (
                         <span className="tech-tag">+{topic.technologies.length - 3} more</span>
                       )}
                     </div>
@@ -275,7 +287,7 @@ const ProjectTopics = () => {
                       </div>
                       <div className="stat">
                         <span className="stat-icon">📚</span>
-                        <span className="stat-text">{topic.resources} resources</span>
+                        <span className="stat-text">{topic.resources || 0} resources</span>
                       </div>
                       <div className="stat">
                         <span className="stat-icon">⭐</span>
@@ -284,13 +296,13 @@ const ProjectTopics = () => {
                     </div>
 
                     <button
-                      className={`wishlist-btn ${isTopicSelected(topic.id) ? 'selected' : ''}`}
+                      className={`wishlist-btn ${isTopicSelected(topic._id) ? 'selected' : ''}`}
                       onClick={() => handleAddToWishlist(topic)}
                     >
                       <span className="btn-icon">
-                        {isTopicSelected(topic.id) ? '✅' : '➕'}
+                        {isTopicSelected(topic._id) ? '✅' : '➕'}
                       </span>
-                      {isTopicSelected(topic.id) ? 'Selected' : 'Add to Wishlist'}
+                      {isTopicSelected(topic._id) ? 'Selected' : 'Add to Wishlist'}
                     </button>
                   </div>
                 </div>
@@ -327,11 +339,13 @@ const ProjectTopics = () => {
               ) : (
                 <div className="selected-topics">
                   {selectedTopics.map(topic => (
-                    <div key={topic.id} className="selected-topic">
+                    <div key={topic._id} className="selected-topic">
                       <div className="selected-topic-content">
                         <h4 className="selected-topic-title">{topic.title}</h4>
                         <div className="selected-topic-meta">
-                          <span className="topic-category">{categories.find(c => c.id === topic.category)?.name}</span>
+                          <span className="topic-category">
+                            {categories.find(c => c.id === topic.category)?.name || topic.category}
+                          </span>
                           <span 
                             className="topic-difficulty"
                             style={{ color: getDifficultyColor(topic.difficulty) }}
@@ -342,7 +356,7 @@ const ProjectTopics = () => {
                       </div>
                       <button
                         className="remove-btn"
-                        onClick={() => handleRemoveFromWishlist(topic.id)}
+                        onClick={() => handleRemoveFromWishlist(topic._id)}
                       >
                         🗑️
                       </button>
@@ -381,7 +395,7 @@ const ProjectTopics = () => {
               </div>
               <div className="stat-item">
                 <span className="stat-value">
-                  {selectedTopics.reduce((acc, topic) => acc + topic.complexity, 0) / selectedTopics.length || 0}
+                  {Math.round(selectedTopics.reduce((acc, topic) => acc + topic.complexity, 0) / selectedTopics.length || 0)}
                 </span>
                 <span className="stat-label">Avg. Complexity</span>
               </div>

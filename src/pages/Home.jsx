@@ -6,10 +6,79 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [user, setUser] = useState({
-    name: 'Sarah Johnson',
+    name: '',
     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face',
-    role: 'Computer Science Student'
+    role: '',
+    email: ''
   });
+
+  // Load user data from localStorage on component mount
+  useEffect(() => {
+    const loadUserData = () => {
+      try {
+        const loginData = localStorage.getItem('loginData');
+        const userData = localStorage.getItem('userData');
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+        if (isLoggedIn === 'true' && userData) {
+          const parsedUser = JSON.parse(userData);
+          console.log('Loaded user data:', parsedUser);
+          
+          setUser({
+            name: parsedUser.fullName || 'User',
+            role: parsedUser.role ? `${parsedUser.role.charAt(0).toUpperCase() + parsedUser.role.slice(1)}` : 'Member',
+            email: parsedUser.email || '',
+            avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face'
+          });
+        } else if (loginData) {
+          // Fallback to loginData if userData doesn't exist
+          const parsedLoginData = JSON.parse(loginData);
+          if (parsedLoginData.user) {
+            const user = parsedLoginData.user;
+            setUser({
+              name: user.fullName || user.name || 'User',
+              role: user.role ? `${user.role.charAt(0).toUpperCase() + user.role.slice(1)}` : 'Member',
+              email: user.email || '',
+              avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face'
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user data from localStorage:', error);
+        // Set default user data if there's an error
+        setUser({
+          name: 'User',
+          role: 'Member',
+          email: '',
+          avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face'
+        });
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  // Function to get user display name
+  const getUserDisplayName = () => {
+    if (!user.name) return 'there';
+    
+    // Return first name only if full name exists
+    const nameParts = user.name.split(' ');
+    return nameParts[0] || user.name;
+  };
+
+  // Function to get role display text
+  const getRoleDisplay = () => {
+    if (!user.role) return 'Member';
+    
+    const roleMap = {
+      'student': 'Student',
+      'mentor': 'Mentor',
+      'professional': 'Professional'
+    };
+    
+    return roleMap[user.role.toLowerCase()] || user.role;
+  };
 
   const categories = [
     { id: 'all', name: 'All Projects', count: 12, icon: '📁' },
@@ -126,6 +195,15 @@ const Home = () => {
     // Implement view details functionality
   };
 
+  // Debug function to show current user data (remove in production)
+  const showCurrentUserData = () => {
+    const loginData = localStorage.getItem('loginData');
+    const userData = localStorage.getItem('userData');
+    console.log('Current localStorage - loginData:', loginData);
+    console.log('Current localStorage - userData:', userData);
+    console.log('Current user state:', user);
+  };
+
   return (
     <div className="home-container">
       {/* Header */}
@@ -133,18 +211,39 @@ const Home = () => {
         <div className="header-content">
           <div className="header-left">
             <h1 className="welcome-text">
-              Welcome back, <span className="gradient-text">{user.name}</span>!
+              Welcome back, <span className="gradient-text">{getUserDisplayName()}</span>!
             </h1>
-            <p className="welcome-subtitle">Ready to find your next amazing project?</p>
+            <p className="welcome-subtitle">
+              {user.role ? `Ready to find your next amazing project, ${getRoleDisplay()}?` : 'Ready to find your next amazing project?'}
+            </p>
+            
+            {/* Debug info - remove in production */}
+            {process.env.NODE_ENV === 'development' && (
+              <div style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
+                <details>
+                  <summary>Debug Info</summary>
+                  <div>Name: {user.name}</div>
+                  <div>Role: {user.role}</div>
+                  <div>Email: {user.email}</div>
+                  <button 
+                    onClick={showCurrentUserData}
+                    style={{ marginTop: '5px', padding: '2px 5px', fontSize: '10px' }}
+                  >
+                    Log User Data
+                  </button>
+                </details>
+              </div>
+            )}
           </div>
           <div className="header-right">
-            <div className="user-profile">
+            {/* User Profile Section - Uncomment if you want to show user profile */}
+            {/* <div className="user-profile">
               <img src={user.avatar} alt={user.name} className="user-avatar" />
               <div className="user-info">
                 <span className="user-name">{user.name}</span>
-                <span className="user-role">{user.role}</span>
+                <span className="user-role">{getRoleDisplay()}</span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

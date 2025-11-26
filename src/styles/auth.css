@@ -442,3 +442,132 @@
 .form-input.success {
   border-color: #10b981;
 }
+
+
+
+
+
+
+
+
+/* Message Styles */
+.auth-messages-container {
+  margin-bottom: 1.5rem;
+}
+
+.auth-message {
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid;
+  animation: slideIn 0.3s ease-out;
+}
+
+.auth-message-success {
+  background-color: #f0f9ff;
+  border-color: #0ea5e9;
+  color: #0369a1;
+}
+
+.auth-message-error {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.auth-message-warning {
+  background-color: #fffbeb;
+  border-color: #fed7aa;
+  color: #ea580c;
+}
+
+.auth-message-info {
+  background-color: #f0f9ff;
+  border-color: #bae6fd;
+  color: #0369a1;
+}
+
+.auth-message-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-message-icon {
+  font-size: 1.2rem;
+}
+
+.auth-message-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.auth-message-content {
+  font-size: 0.875rem;
+}
+
+.auth-message-text {
+  margin: 0 0 0.25rem 0;
+  font-weight: 500;
+}
+
+.auth-message-details {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.8rem;
+}
+
+/* Loading spinner */
+.auth-btn-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Debug info for development */
+.auth-debug-info {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+}
+
+.auth-debug-info details {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.auth-debug-info summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.auth-debug-info pre {
+  background: #f8fafc;
+  padding: 0.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+}

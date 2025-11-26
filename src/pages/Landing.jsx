@@ -111,10 +111,12 @@ const Landing = () => {
             Save your favorites, explore trending topics, and kickstart your academic journey.
           </p>
           <div className="hero-buttons">
+            <Link to="/home">
             <button className="btn-hero-primary">
               <span className="btn-glow"></span>
               Get Started Free
             </button>
+            </Link>
             <button className="btn-hero-secondary">
               <span className="play-icon">▶</span>
               Watch Demo

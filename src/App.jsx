@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Topics from "./pages/Topics";
+import AdminPanel from "./pages/AdminPanel";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -27,6 +28,9 @@ function App() {
         {/* Logged-in User Pages */}
         <Route path="/home" element={<Home />} /> 
         <Route path="/topics" element={<Topics />} /> 
+
+        {/* Admin Pages */}
+        <Route path="/admin/panel" element={<AdminPanel />} />
       </Routes>
 
       {/* Footer Always Visible */}
