@@ -97,31 +97,6 @@ function Navbar() {
               </div>
 
               {/* User Section */}
-              <div style={userSectionStyle}>
-                {userData && (
-                  <div style={userInfoStyle}>
-                    <div style={userAvatarStyle}>
-                      {userData.fullName?.charAt(0) || 'U'}
-                    </div>
-                    <div style={userDetailsStyle}>
-                      <div style={userNameStyle}>
-                        {userData.fullName || 'User'}
-                      </div>
-                      <div style={userRoleStyle}>
-                        {userData.role ? userData.role.charAt(0).toUpperCase() + userData.role.slice(1) : 'Member'}
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {/* <button 
-                  onClick={handleLogout}
-                  style={logoutButtonStyle}
-                  title="Logout"
-                >
-                  <HiLogout style={iconStyle} />
-                </button> */}
-              </div>
             </>
           ) : (
             /* Public Navigation */
