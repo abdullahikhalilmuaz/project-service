@@ -314,8 +314,11 @@ const Landing = () => {
                 </p>
                 <div className="social-links">
                   <a href="#" className="social-link">📘</a>
+                  <br />
                   <a href="#" className="social-link">🐦</a>
+                  <br />
                   <a href="#" className="social-link">📷</a>
+                  <br />
                   <a href="#" className="social-link">💼</a>
                 </div>
               </div>
@@ -349,7 +352,7 @@ const Landing = () => {
               </div>
             </div>
             <div className="footer-bottom">
-              <p>&copy; 2024 ProjectHub. All rights reserved.</p>
+              <p>&copy; 2025 Abdullahi H Mu'az. All rights reserved.</p>
               <div className="footer-meta">
                 <span>Made with ❤️ for students</span>
               </div>

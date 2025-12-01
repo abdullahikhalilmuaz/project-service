@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import NavIcons  from "./NavIcons";
 import { 
   HiHome, 
   HiCollection, 
@@ -10,8 +11,15 @@ import {
 function Navbar() {
   const location = useLocation();
 
+  const home = window.location.pathname === "/"
+  const logins = window.location.pathname === "/login"
+  const register = window.location.pathname === "/register"
+  console.log(home)
+  console.log(logins)
+  console.log(register)
+
   // Don't show navbar on login and register pages
-  if (location.pathname === "/login" || location.pathname === "/register") {
+  if (location.pathname === "/Login" || location.pathname === "/register") {
     return null;
   }
 
@@ -47,8 +55,11 @@ function Navbar() {
 
   const userData = getUserData();
   const isAdminPanel = location.pathname === "/admin/panel";
-
   return (
+    <>
+
+    {home === true ? "" : logins === true ? "" : register === true ? "": (<>
+      
     <nav style={navbarStyle}>
       <div style={navContainerStyle}>
         
@@ -58,44 +69,7 @@ function Navbar() {
           {checkLoginStatus() ? (
             <>
               {/* Main Navigation */}
-              <div style={navSectionStyle}>
-                <Link 
-                  to="/home" 
-                  style={{
-                    ...navItemStyle,
-                    ...(location.pathname === "/home" ? activeNavItemStyle : {})
-                  }}
-                >
-                  <HiHome style={iconStyle} />
-                  <span style={navLabelStyle}>Home</span>
-                </Link>
-                
-                <Link 
-                  to="/topics" 
-                  style={{
-                    ...navItemStyle,
-                    ...(location.pathname === "/topics" ? activeNavItemStyle : {})
-                  }}
-                >
-                  <HiCollection style={iconStyle} />
-                  <span style={navLabelStyle}>Topics</span>
-                </Link>
-
-                {/* Admin Panel Link - Only show if user is admin or on admin panel */}
-                {(userData?.role === 'admin' || isAdminPanel) && (
-                  <Link 
-                    to="/admin/panel" 
-                    style={{
-                      ...navItemStyle,
-                      ...(location.pathname === "/admin/panel" ? activeNavItemStyle : {})
-                    }}
-                  >
-                    <HiCog style={iconStyle} />
-                    <span style={navLabelStyle}>Admin</span>
-                  </Link>
-                )}
-              </div>
-
+            <NavIcons />
               {/* User Section */}
             </>
           ) : (
@@ -105,6 +79,8 @@ function Navbar() {
         </div>
       </div>
     </nav>
+      </>)}
+      </>
   );
 }
 
@@ -174,60 +150,6 @@ const linksContainerStyle = {
   gap: "2rem",
 };
 
-const navSectionStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "0.5rem",
-  padding: "0.5rem",
-  borderRadius: "16px",
-  backgroundColor: "rgba(0, 0, 0, 0.02)",
-};
-
-const navItemStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "0.5rem",
-  padding: "0.75rem 1.25rem",
-  borderRadius: "12px",
-  textDecoration: "none",
-  color: "#64748b",
-  fontWeight: "500",
-  fontSize: "0.95rem",
-  transition: "all 0.2s ease",
-  backgroundColor: "transparent",
-  border: "none",
-  cursor: "pointer",
-  ":hover": {
-    backgroundColor: "rgba(99, 102, 241, 0.1)",
-    color: "#4f46e5",
-    transform: "translateY(-1px)",
-  }
-};
-
-const activeNavItemStyle = {
-  backgroundColor: "rgba(99, 102, 241, 0.15)",
-  color: "#4f46e5",
-  fontWeight: "600",
-};
-
-const iconStyle = {
-  fontSize: "1.25rem",
-  flexShrink: 0,
-};
-
-const navLabelStyle = {
-  fontSize: "0.9rem",
-  fontWeight: "inherit",
-};
-
-const userSectionStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "1rem",
-  padding: "0.5rem",
-  borderRadius: "16px",
-  backgroundColor: "rgba(0, 0, 0, 0.02)",
-};
 
 const userInfoStyle = {
   display: "flex",

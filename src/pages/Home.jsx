@@ -250,7 +250,7 @@ const Home = () => {
 
       {/* Stats Section */}
       <section className="stats-section">
-        <div className="stats-grid">
+        {/* <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-icon">📁</div>
             <div className="stat-content">
@@ -279,7 +279,7 @@ const Home = () => {
               <div className="stat-label">In Progress</div>
             </div>
           </div>
-        </div>
+        </div> */}
       </section>
 
       {/* Main Content */}

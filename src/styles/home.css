@@ -90,13 +90,19 @@
   padding: 2rem clamp(1.5rem, 6vw, 4rem);
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  max-width: 1400px;
-  margin: 0 auto;
-}
+/* .stats-grid {
+  font-size: 2.5rem;
+  width: 100%;
+  /* height: ; */
+  /* display: flex;
+  flex-wrap: wrap; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* background: rgba(99, 102, 241, 0.1); */
+  /* border-radius: 12px; */
+  
+  /* background-color: orange; */
+/* } */ 
 
 .stat-card {
   background: white;
@@ -105,6 +111,7 @@
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
   transition: all 0.3s ease;

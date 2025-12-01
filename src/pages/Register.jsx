@@ -18,6 +18,11 @@ const Register = () => {
     details: '' // Additional details from server
   });
 
+   const handleBackToHome = () => {
+    const locate = window.location.pathname = "/"
+    window.location === locate
+  }
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -219,6 +224,7 @@ const Register = () => {
 
     return (
       <div className={`${baseClass} ${typeClass}`}>
+      
         <div className="auth-message-header">
           <span className="auth-message-icon">
             {serverResponse.type === 'success' && '✅'}
@@ -246,6 +252,8 @@ const Register = () => {
   return (
     <div className='contnet-content-container'>
       <div className="auth-container">
+          <div style={{position:"absolute", fontSize:"50px", zIndex:9000, color:"gray", top:"0", left:"10px", fontWeight:"bolder", cursor:"pointer"}} onClick={handleBackToHome}>&laquo;</div>
+      
         <div className="auth-background">
           <div className="auth-shapes">
             <div className="auth-shape shape-1"></div>

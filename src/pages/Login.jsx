@@ -178,6 +178,10 @@ const Login = () => {
       return { isLoggedIn: false };
     }
   };
+  const handleBackToHome = () => {
+    const locate = window.location.pathname = "/"
+    window.location === locate
+  }
 
   // Function to render appropriate message style based on type
   const renderMessage = () => {
@@ -185,7 +189,8 @@ const Login = () => {
 
     const baseClass = "auth-message";
     const typeClass = `auth-message-${serverResponse.type}`;
-
+    
+    
     return (
       <div className={`${baseClass} ${typeClass}`}>
         <div className="auth-message-header">
@@ -215,6 +220,7 @@ const Login = () => {
   return (
     <div className='contnet-content-container'>
       <div className="auth-container">
+      <div style={{position:"absolute", fontSize:"50px", zIndex:9000, color:"gray", top:"0", left:"10px", fontWeight:"bolder", cursor:"pointer"}} onClick={handleBackToHome}>&laquo;</div>
         <div className="auth-background">
           <div className="auth-shapes">
             <div className="auth-shape shape-1"></div>
