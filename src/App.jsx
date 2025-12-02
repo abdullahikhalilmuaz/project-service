@@ -7,9 +7,11 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Topics from "./pages/Topics";
 import AdminPanel from "./pages/AdminPanel";
+import AdminDashboard from "./pages/AdminDashboard";
 
 // Components
 import Navbar from "./components/Navbar";
+import ProposalPage from "./pages/ProposalPage";
 // import Footer from "./components/Footer";
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
 
         {/* Admin Pages */}
         <Route path="/admin/panel" element={<AdminPanel />} />
+        <Route path="/my-proposals" element={<ProposalPage />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
 
       {/* Footer Always Visible */}

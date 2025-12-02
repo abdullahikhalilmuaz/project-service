@@ -29,12 +29,26 @@ const ProjectTopics = () => {
     { id: 'advanced', name: 'Advanced' }
   ];
 
+  // Load selected topics from localStorage on component mount
+  useEffect(() => {
+    const savedTopics = localStorage.getItem('selectedTopics');
+    if (savedTopics) {
+      try {
+        const parsedTopics = JSON.parse(savedTopics);
+        setSelectedTopics(parsedTopics);
+      } catch (error) {
+        console.error('Error parsing saved topics:', error);
+        localStorage.removeItem('selectedTopics');
+      }
+    }
+  }, []);
+
   // Fetch project topics from backend
   useEffect(() => {
     const fetchProjectTopics = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://project-service-server.onrender.com/api/topics');
+        const response = await fetch('http://localhost:5000/api/topics');
         
         if (!response.ok) {
           throw new Error('Failed to fetch project topics');
@@ -57,6 +71,15 @@ const ProjectTopics = () => {
 
     fetchProjectTopics();
   }, []);
+
+  // Save to localStorage whenever selectedTopics changes
+  useEffect(() => {
+    if (selectedTopics.length > 0) {
+      localStorage.setItem('selectedTopics', JSON.stringify(selectedTopics));
+    } else {
+      localStorage.removeItem('selectedTopics');
+    }
+  }, [selectedTopics]);
 
   const filteredTopics = projectTopics
     .filter(topic => {
@@ -91,18 +114,36 @@ const ProjectTopics = () => {
     }
 
     if (isTopicSelected(topic._id)) {
-      setSelectedTopics(selectedTopics.filter(t => t._id !== topic._id));
+      // Remove from wishlist
+      const updatedTopics = selectedTopics.filter(t => t._id !== topic._id);
+      setSelectedTopics(updatedTopics);
+      // Update localStorage
+      if (updatedTopics.length > 0) {
+        localStorage.setItem('selectedTopics', JSON.stringify(updatedTopics));
+      } else {
+        localStorage.removeItem('selectedTopics');
+      }
     } else {
-      setSelectedTopics([...selectedTopics, topic]);
+      // Add to wishlist
+      const updatedTopics = [...selectedTopics, topic];
+      setSelectedTopics(updatedTopics);
+      localStorage.setItem('selectedTopics', JSON.stringify(updatedTopics));
     }
   };
 
   const handleRemoveFromWishlist = (topicId) => {
-    setSelectedTopics(selectedTopics.filter(topic => topic._id !== topicId));
+    const updatedTopics = selectedTopics.filter(topic => topic._id !== topicId);
+    setSelectedTopics(updatedTopics);
+    if (updatedTopics.length > 0) {
+      localStorage.setItem('selectedTopics', JSON.stringify(updatedTopics));
+    } else {
+      localStorage.removeItem('selectedTopics');
+    }
   };
 
   const handleClearWishlist = () => {
     setSelectedTopics([]);
+    localStorage.removeItem('selectedTopics');
   };
 
   const getDifficultyColor = (difficulty) => {
@@ -119,7 +160,7 @@ const ProjectTopics = () => {
       <div className="project-topics-container">
         <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p>Loading project topics...</p>
+          <p className='topics-loading-text'>Loading project topics...</p>
         </div>
       </div>
     );
@@ -130,8 +171,8 @@ const ProjectTopics = () => {
       <div className="project-topics-container">
         <div className="error-state">
           <div className="error-icon">⚠️</div>
-          <h3>Error Loading Topics</h3>
-          <p>{error}</p>
+          <h3 className='topics-loading-text'>Error Loading Topics</h3>
+          <p className='topics-loading-text'>{error}</p>
           <button 
             onClick={() => window.location.reload()} 
             className="retry-btn"
@@ -320,88 +361,7 @@ const ProjectTopics = () => {
         </div>
 
         {/* Wishlist Sidebar */}
-        <div className="wishlist-sidebar">
-          <div className="wishlist-card">
-            <div className="wishlist-header">
-              <h3 className="wishlist-title">Your Project Proposal</h3>
-              <p className="wishlist-subtitle">
-                Selected Topics: {selectedTopics.length}/3
-              </p>
-            </div>
-
-            <div className="wishlist-content">
-              {selectedTopics.length === 0 ? (
-                <div className="empty-wishlist">
-                  <div className="empty-icon">📝</div>
-                  <p>No topics selected yet</p>
-                  <span>Browse and add up to 3 project topics</span>
-                </div>
-              ) : (
-                <div className="selected-topics">
-                  {selectedTopics.map(topic => (
-                    <div key={topic._id} className="selected-topic">
-                      <div className="selected-topic-content">
-                        <h4 className="selected-topic-title">{topic.title}</h4>
-                        <div className="selected-topic-meta">
-                          <span className="topic-category">
-                            {categories.find(c => c.id === topic.category)?.name || topic.category}
-                          </span>
-                          <span 
-                            className="topic-difficulty"
-                            style={{ color: getDifficultyColor(topic.difficulty) }}
-                          >
-                            {topic.difficulty}
-                          </span>
-                        </div>
-                      </div>
-                      <button
-                        className="remove-btn"
-                        onClick={() => handleRemoveFromWishlist(topic._id)}
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {selectedTopics.length > 0 && (
-                <div className="wishlist-actions">
-                  <button className="clear-btn" onClick={handleClearWishlist}>
-                    Clear All
-                  </button>
-                  <button 
-                    className="submit-btn"
-                    disabled={selectedTopics.length === 0}
-                  >
-                    Submit Proposal ({selectedTopics.length}/3)
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Quick Stats */}
-          <div className="stats-card">
-            <h4>Selection Summary</h4>
-            <div className="stats-grid">
-              <div className="stat-item">
-                <span className="stat-value">{selectedTopics.length}</span>
-                <span className="stat-label">Selected</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-value">{3 - selectedTopics.length}</span>
-                <span className="stat-label">Remaining</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-value">
-                  {Math.round(selectedTopics.reduce((acc, topic) => acc + topic.complexity, 0) / selectedTopics.length || 0)}
-                </span>
-                <span className="stat-label">Avg. Complexity</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      
       </div>
     </div>
   );

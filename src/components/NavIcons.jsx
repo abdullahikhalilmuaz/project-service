@@ -41,6 +41,16 @@ export default function NavIcons() {
                   <HiCollection style={iconStyle} />
                   <span style={navLabelStyle}>Topics</span>
                 </Link>
+                <Link 
+                  to="/my-proposals" 
+                  style={{
+                    ...navItemStyle,
+                    ...(location.pathname === "/topics" ? activeNavItemStyle : {})
+                  }}
+                >
+                  <HiCollection style={iconStyle} />
+                  <span style={navLabelStyle}>Proposals</span>
+                </Link>
 
               </div>
 
