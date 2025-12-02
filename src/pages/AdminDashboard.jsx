@@ -36,7 +36,7 @@ const AdminDashboard = () => {
   const fetchProposals = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/proposals/admin/all');
+      const response = await fetch('https://project-service-server.onrender.com/api/proposals/admin/all');
       
       if (!response.ok) {
         throw new Error('Failed to fetch proposals');
@@ -93,7 +93,7 @@ const AdminDashboard = () => {
 
   const handleStatusUpdate = async (proposalId, status) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/proposals/admin/update/${proposalId}`, {
+      const response = await fetch(`https://project-service-server.onrender.com/api/proposals/admin/update/${proposalId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ const AdminDashboard = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/proposals/${proposalId}`, {
+      const response = await fetch(`https://project-service-server.onrender.com/api/proposals/${proposalId}`, {
         method: 'DELETE'
       });
 
@@ -197,11 +197,11 @@ const AdminDashboard = () => {
     try {
       const promises = selectedProposals.map(proposal => {
         if (action === 'delete') {
-          return fetch(`http://localhost:5000/api/proposals/${proposal._id}`, {
+          return fetch(`https://project-service-server.onrender.com/api/proposals/${proposal._id}`, {
             method: 'DELETE'
           });
         } else {
-          return fetch(`http://localhost:5000/api/proposals/admin/update/${proposal._id}`, {
+          return fetch(`https://project-service-server.onrender.com/api/proposals/admin/update/${proposal._id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

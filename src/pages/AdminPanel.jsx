@@ -40,7 +40,7 @@ const AdminPanel = () => {
   const fetchTopics = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/topics');
+      const response = await fetch('https://project-service-server.onrender.com/api/topics');
       const data = await response.json();
       
       if (data.success) {
@@ -94,7 +94,7 @@ const AdminPanel = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:5000/api/topics', {
+      const response = await fetch('https://project-service-server.onrender.com/api/topics', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ const AdminPanel = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/topics/${topicId}`, {
+      const response = await fetch(`https://project-service-server.onrender.com/api/topics/${topicId}`, {
         method: 'DELETE'
       });
 
